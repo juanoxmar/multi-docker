@@ -1,0 +1,27 @@
+language: generic
+
+sudo: required
+services:
+  - docker
+
+# Build client test image
+before_install:
+  - docker build -t joxmar/react-test -f ./client/Dockerfile.dev ./client
+
+# Run tests on client test image
+script:
+  - docker run -e CI=true joxmar/react-test yarn test
+
+after_success:
+  # Build production images
+  - docker build -t joxmar/multi-client ./client
+  - docker build -t joxmar/multi-server ./server
+  - docker build -t joxmar/multi-nginx ./nginx
+  - docker build -t joxmar/multi-worker ./worker
+  # Log into the docker CLI
+  - ehco "$DOCKER_PASSWORD" | docker login -u $DOCKER_ID --password-stdin
+  # Push images to docker hub
+  - docker push joxmar/multi-client
+  - docker push joxmar/multi-server
+  - docker push joxmar/multi-nginx
+  - docker push joxmar/multi-worker
