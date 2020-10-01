@@ -25,3 +25,16 @@ after_success:
   - docker push joxmar/multi-server
   - docker push joxmar/multi-nginx
   - docker push joxmar/multi-worker
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: us-west-2
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-us-west-2-799881107835
+  bucket_path: MultiDocker-env
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
