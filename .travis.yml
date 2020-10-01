@@ -19,7 +19,7 @@ after_success:
   - docker build -t joxmar/multi-nginx ./nginx
   - docker build -t joxmar/multi-worker ./worker
   # Log into the docker CLI
-  - ehco "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Push images to docker hub
   - docker push joxmar/multi-client
   - docker push joxmar/multi-server
